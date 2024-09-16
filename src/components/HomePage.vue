@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 id="homePageTitle">Hierarchy display</h1>
-        <hierarchy-tree :data="data" ></hierarchy-tree>
+        <hierarchy-tree :nodes="data" ></hierarchy-tree>
     </div>
 </template>
 
@@ -17,7 +17,8 @@ export default {
             {   
                 "name":"A",
                 "description":"This is a description of A", 
-                "parent":""
+                "parent":"",
+                "children" : []
             },
             {
                 "name":"B",
