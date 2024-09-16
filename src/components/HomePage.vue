@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 id="homePageTitle">Hierarchy display</h1>
-        <hierarchy-tree :nodes="data" ></hierarchy-tree>
+        <hierarchy-tree class="hierarchyTree" :nodes="data" ></hierarchy-tree>
     </div>
 </template>
 
@@ -54,3 +54,6 @@ export default {
     }}
 }
 </script>
+
+<style>
+</style>
