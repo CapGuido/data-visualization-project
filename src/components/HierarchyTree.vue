@@ -1,15 +1,47 @@
 <template>
     <div id="svgContainer">
     </div>
+    <node-pop-up v-if="popupTrigger.buttonTrigger" :togglePopup="() => this.togglePopup('buttonTrigger', {})" >
+            <h3>{{"name: " + nodeName}}</h3>
+            <p>{{"description: " + descript}}</p>
+            <p>{{"parent: " + parent}}</p>
+        </node-pop-up>
+    <div>
+        <node-block v-for="node in nodes" :key="node.name" @click="() => this.togglePopup('buttonTrigger', node)"
+            :node="node">
+        </node-block>
+    </div>
 </template>
 
 <script>
+import NodeBlock from "./NodeBlock.vue";
+import NodePopUp from "./NodePopUp.vue";
 import * as d3 from "d3";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 export default {
+    name: "HierarchyTree",
+    components: { NodeBlock, NodePopUp },
     props: ['nodes'],
-    setup(props) {  
+    setup(props) {
+        const nodeName = ref("")
+        const descript = ref("")
+        const parent = ref("")
+
+        const popupTrigger = ref({
+            buttonTrigger: false
+
+        })
+
+        const togglePopup = (trigger, node) => {
+            console.log(node.name)
+            nodeName.value = node.name
+            descript.value = node.description
+            parent.value = node.parent
+
+            popupTrigger.value[trigger] = !popupTrigger.value[trigger]
+        }
+
         onMounted(() => {
 
             const width = 928;
@@ -18,11 +50,10 @@ export default {
             // Compute the tree height; this approach will allow the height of the
             // SVG to scale according to the breadth (width) of the tree layout.
             const root = d3.stratify()
-            .id((d) => d.name)
-            .parentId((d) => d.parent)(props.nodes);
+                .id((d) => d.name)
+                .parentId((d) => d.parent)(props.nodes);
             const dx = 30;
             const dy = width / (root.height + 1);
-            console.log(root.height);
 
             // Create a tree layout.
             const tree = d3.tree().nodeSize([dx, dy]);
@@ -47,13 +78,15 @@ export default {
                 .append('svg')
                 .attr("width", width)
                 .attr("height", height)
+                .attr("viewBox", [-dy / 3, x0 - dx, width, height])
+                .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
 
             svg.append("g")
                 .attr("fill", "none")
                 .attr("stroke", "#555")
                 .attr("stroke-opacity", 0.4)
                 .attr("stroke-width", 1.5)
-            .selectAll()
+                .selectAll()
                 .data(root.links())
                 .join("path")
                 .attr("d", d3.linkHorizontal()
@@ -63,9 +96,9 @@ export default {
             const node = svg.append("g")
                 .attr("stroke-linejoin", "round")
                 .attr("stroke-width", 3)
-            .selectAll()
-            .data(root.descendants())
-            .join("g")
+                .selectAll()
+                .data(root.descendants())
+                .join("g")
                 .attr("transform", d => `translate(${d.y},${d.x})`);
 
             node.append("circle")
@@ -81,8 +114,15 @@ export default {
                 .attr("paint-order", "stroke");
 
             return svg.node();
-        }) 
-    
+        })
+
+        return {
+            nodeName,
+            descript,
+            parent,
+            popupTrigger,
+            togglePopup,
+        }
     },
 }
 </script>
@@ -90,5 +130,9 @@ export default {
 <style>
 #svgContainer {
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 </style>
