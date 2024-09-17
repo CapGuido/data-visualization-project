@@ -1,11 +1,20 @@
 # hierarchy-display
 
-## Project setup
+## First steps
+git clone project to your own machine
+cd into folder
+
+## Setup Project
 ```
 npm install
 ```
+### To run this application use
+#### first make sure that the backend server is running
+```
+node src/server.js
+```
+#### second run the application
 
-### To run the application use
 ```
 npm run serve
 ```

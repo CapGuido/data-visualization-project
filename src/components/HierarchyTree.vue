@@ -1,15 +1,22 @@
 <template>
-    <div id="svgContainer">
-    </div>
-    <node-pop-up v-if="popupTrigger.buttonTrigger" :togglePopup="() => this.togglePopup('buttonTrigger', {})" >
-            <h3>{{"name: " + nodeName}}</h3>
-            <p>{{"description: " + descript}}</p>
-            <p>{{"parent: " + parent}}</p>
-        </node-pop-up>
     <div>
-        <node-block v-for="node in nodes" :key="node.name" @click="() => this.togglePopup('buttonTrigger', node)"
-            :node="node">
-        </node-block>
+        <div id="svgContainer">
+            <svg>
+                <g id="y-axis"></g>
+                <g id="x-axis"></g>
+                <g id="nodesGroup"></g>
+            </svg>
+        </div>
+        <node-pop-up v-if="popupTrigger.buttonTrigger" :togglePopup="() => this.togglePopup('buttonTrigger', {})">
+            <h3>{{ "name: " + nodeName }}</h3>
+            <p>{{ "description: " + descript }}</p>
+            <p>{{ "parent: " + parent }}</p>
+        </node-pop-up>
+        <div>
+            <node-block v-for="node in nodes" :key="node.name" @click="() => this.togglePopup('buttonTrigger', node)"
+                :node="node">
+            </node-block>
+        </div>
     </div>
 </template>
 
@@ -34,7 +41,6 @@ export default {
         })
 
         const togglePopup = (trigger, node) => {
-            console.log(node.name)
             nodeName.value = node.name
             descript.value = node.description
             parent.value = node.parent
