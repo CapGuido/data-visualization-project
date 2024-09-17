@@ -8,13 +8,13 @@ cd into folder
 ```
 npm install
 ```
-
 ### To run this application use
 #### first make sure that the backend server is running
 ```
 node src/server.js
 ```
 #### second run the application
+
 ```
 npm run serve
 ```
